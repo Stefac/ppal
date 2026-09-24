@@ -21,9 +21,39 @@ curl -fsSL https://github.com/Stefac/ppal/releases/latest/download/install.sh | 
 irm https://github.com/Stefac/ppal/releases/latest/download/install.ps1 | iex
 ```
 
-Lo script scarica il file giusto per il tuo sistema, ne verifica lo SHA-256 e lo installa in `~/.local/bin` (Mac/Linux) o `%LOCALAPPDATA%\ppal` (Windows). Se la cartella non è nel `PATH` ti dice come aggiungerla.
+Lo script scarica il file giusto per il tuo sistema, ne verifica lo SHA-256 e lo installa **sempre nella stessa cartella, qualunque sia la cartella da cui lo lanci** (non crea nulla nella cartella corrente):
 
-Opzioni: `PPAL_VERSION=0.1.0` per una versione precisa, `PPAL_INSTALL_DIR=/percorso` per cambiare cartella.
+| Sistema | Dove viene installato |
+|---|---|
+| Mac e Linux | `~/.local/bin/ppal` (la cartella viene creata se manca) |
+| Windows | `%LOCALAPPDATA%\ppal\ppal.exe` |
+
+Alla fine lo script stampa il percorso esatto.
+
+### Aggiungerlo al PATH
+
+Per lanciare `ppal` da qualsiasi cartella, la cartella di installazione deve essere nel `PATH`.
+
+- **Windows**: l'installer la aggiunge da solo al PATH dell'utente. Apri un nuovo terminale.
+- **Mac e Linux**: l'installer **non** modifica i tuoi file di configurazione. Se `ppal` risulta «command not found», aggiungi la riga al file della tua shell e riapri il terminale:
+
+  ```sh
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc    # zsh (default su macOS)
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc   # bash
+  ```
+
+  Fino ad allora puoi usarlo con il percorso completo: `~/.local/bin/ppal`.
+
+Verifica con `ppal --help`.
+
+### Opzioni
+
+- `PPAL_VERSION=0.1.0` installa una versione precisa invece dell'ultima.
+- `PPAL_INSTALL_DIR=/percorso` cambia la cartella di installazione (anche `.` per la cartella corrente):
+
+  ```sh
+  curl -fsSL https://github.com/Stefac/ppal/releases/latest/download/install.sh | PPAL_INSTALL_DIR=. sh
+  ```
 
 Se preferisci fare a mano, scarica il file per la tua piattaforma dalla pagina [Releases](https://github.com/Stefac/ppal/releases), rendilo eseguibile (`chmod +x`) e mettilo nel `PATH`.
 
